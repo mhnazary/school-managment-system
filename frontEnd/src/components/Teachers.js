@@ -33,7 +33,7 @@ const Teachers = () => {
     const fetchTeachers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/teachers', {
+        const response = await axios.get('process.env.REACT_APP_API_URL/api/teachers', {
           headers: { 'x-auth-token': token }
         });
         setTeachers(response.data);
@@ -54,12 +54,12 @@ const Teachers = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/teachers', formData, {
+      await axios.post('process.env.REACT_APP_API_URL/api/teachers', formData, {
         headers: { 'x-auth-token': token }
       });
       
       // Refresh teachers list
-      const response = await axios.get('http://localhost:5000/api/teachers', {
+      const response = await axios.get('process.env.REACT_APP_API_URL/api/teachers', {
         headers: { 'x-auth-token': token }
       });
       setTeachers(response.data);
@@ -106,12 +106,12 @@ const Teachers = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/teachers/${selectedTeacher._id}`, formData, {
+      await axios.put(`process.env.REACT_APP_API_URL/api/teachers/${selectedTeacher._id}`, formData, {
         headers: { 'x-auth-token': token }
       });
       
       // Refresh teachers list
-      const response = await axios.get('http://localhost:5000/api/teachers', {
+      const response = await axios.get('process.env.REACT_APP_API_URL/api/teachers', {
         headers: { 'x-auth-token': token }
       });
       setTeachers(response.data);
@@ -141,12 +141,12 @@ const Teachers = () => {
     if (window.confirm('آیا از حذف این معلم مطمئن هستید؟')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/teachers/${id}`, {
+        await axios.delete(`process.env.REACT_APP_API_URL/api/teachers/${id}`, {
           headers: { 'x-auth-token': token }
         });
         
         // Refresh teachers list
-        const response = await axios.get('http://localhost:5000/api/teachers', {
+        const response = await axios.get('process.env.REACT_APP_API_URL/api/teachers', {
           headers: { 'x-auth-token': token }
         });
         setTeachers(response.data);

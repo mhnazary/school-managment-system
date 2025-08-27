@@ -40,7 +40,7 @@ const TeacherPayment = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:5000/api/teachers/${teacherId}`,
+          `process.env.REACT_APP_API_URL/api/teachers/${teacherId}`,
           {
             headers: { "x-auth-token": token },
           }
@@ -55,7 +55,7 @@ const TeacherPayment = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:5000/api/teachers/${teacherId}/payments`,
+          `process.env.REACT_APP_API_URL/api/teachers/${teacherId}/payments`,
           {
             headers: { "x-auth-token": token },
           }
@@ -97,7 +97,7 @@ const TeacherPayment = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:5000/api/teacherPayments",
+        "process.env.REACT_APP_API_URL/api/teacherPayments",
         {
           ...formData,
           teacher: teacherId,
@@ -110,7 +110,7 @@ const TeacherPayment = () => {
       
       // Refresh payments
       const paymentsResponse = await axios.get(
-        `http://localhost:5000/api/teachers/${teacherId}/payments`,
+        `process.env.REACT_APP_API_URL/api/teachers/${teacherId}/payments`,
         {
           headers: { "x-auth-token": token },
         }
@@ -139,7 +139,7 @@ const TeacherPayment = () => {
       try {
         const token = localStorage.getItem("token");
         await axios.delete(
-          `http://localhost:5000/api/teacherPayments/${paymentId}`,
+          `process.env.REACT_APP_API_URL/api/teacherPayments/${paymentId}`,
           {
             headers: { "x-auth-token": token },
           }
@@ -147,7 +147,7 @@ const TeacherPayment = () => {
         
         // Refresh payments
         const paymentsResponse = await axios.get(
-          `http://localhost:5000/api/teachers/${teacherId}/payments`,
+          `process.env.REACT_APP_API_URL/api/teachers/${teacherId}/payments`,
           {
             headers: { "x-auth-token": token },
           }

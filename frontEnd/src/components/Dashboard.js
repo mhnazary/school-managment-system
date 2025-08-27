@@ -110,16 +110,16 @@ const Dashboard = () => {
       
       // Make parallel requests to get all stats
       const [studentsRes, teachersRes, classesRes, paymentsRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/students', {
+        axios.get('process.env.REACT_APP_API_URL/api/students', {
           headers: { 'x-auth-token': token }
         }),
-        axios.get('http://localhost:5000/api/teachers', {
+        axios.get('process.env.REACT_APP_API_URL/api/teachers', {
           headers: { 'x-auth-token': token }
         }),
-        axios.get('http://localhost:5000/api/classes', {
+        axios.get('process.env.REACT_APP_API_URL/api/classes', {
           headers: { 'x-auth-token': token }
         }),
-        axios.get(`http://localhost:5000/api/payments/reports/annual`, {
+        axios.get(`process.env.REACT_APP_API_URL/api/payments/reports/annual`, {
           headers: { 'x-auth-token': token },
           params: { year: currentYear }
         })
@@ -196,14 +196,14 @@ const Dashboard = () => {
           setApiStatus(prev => ({ ...prev, tuition: { ...prev.tuition, loading: true, error: null } }));
           
           // Get all students first
-          const studentsResponse = await axios.get('http://localhost:5000/api/students', {
+          const studentsResponse = await axios.get('process.env.REACT_APP_API_URL/api/students', {
             headers: { 'x-auth-token': token }
           });
           
           // Then get payments for each student for the selected month and year
           const studentPaymentPromises = studentsResponse.data.map(async (student) => {
             try {
-              const paymentsResponse = await axios.get(`http://localhost:5000/api/students/${student._id}/payments`, {
+              const paymentsResponse = await axios.get(`process.env.REACT_APP_API_URL/api/students/${student._id}/payments`, {
                 headers: { 'x-auth-token': token }
               });
               
@@ -262,7 +262,7 @@ const Dashboard = () => {
         try {
           // Fetch salaries data
           setApiStatus(prev => ({ ...prev, salaries: { ...prev.salaries, loading: true, error: null } }));
-          const salariesResponse = await axios.get('http://localhost:5000/api/teacherPayments/reports/monthly', {
+          const salariesResponse = await axios.get('process.env.REACT_APP_API_URL/api/teacherPayments/reports/monthly', {
             headers: { 'x-auth-token': token },
             params: { 
               year: selectedYear, 
@@ -283,7 +283,7 @@ const Dashboard = () => {
         try {
           // Fetch expenses data
           setApiStatus(prev => ({ ...prev, expenses: { ...prev.expenses, loading: true, error: null } }));
-          const expensesResponse = await axios.get('http://localhost:5000/api/expenses', {
+          const expensesResponse = await axios.get('process.env.REACT_APP_API_URL/api/expenses', {
             headers: { 'x-auth-token': token },
             params: { 
               year: selectedYear, 
@@ -308,7 +308,7 @@ const Dashboard = () => {
         try {
           // Fetch tuition data for the whole year
           setApiStatus(prev => ({ ...prev, tuition: { ...prev.tuition, loading: true, error: null } }));
-          const tuitionResponse = await axios.get('http://localhost:5000/api/payments/reports/annual', {
+          const tuitionResponse = await axios.get('process.env.REACT_APP_API_URL/api/payments/reports/annual', {
             headers: { 'x-auth-token': token },
             params: { year: selectedYear }
           });
@@ -326,7 +326,7 @@ const Dashboard = () => {
         try {
           // Fetch salaries data for the whole year
           setApiStatus(prev => ({ ...prev, salaries: { ...prev.salaries, loading: true, error: null } }));
-          const salariesResponse = await axios.get('http://localhost:5000/api/teacherPayments/reports/annual', {
+          const salariesResponse = await axios.get('process.env.REACT_APP_API_URL/api/teacherPayments/reports/annual', {
             headers: { 'x-auth-token': token },
             params: { year: selectedYear }
           });
@@ -344,7 +344,7 @@ const Dashboard = () => {
         try {
           // Fetch expenses data for the whole year
           setApiStatus(prev => ({ ...prev, expenses: { ...prev.expenses, loading: true, error: null } }));
-          const expensesResponse = await axios.get('http://localhost:5000/api/expenses', {
+          const expensesResponse = await axios.get('process.env.REACT_APP_API_URL/api/expenses', {
             headers: { 'x-auth-token': token },
             params: { year: selectedYear }
           });
@@ -451,7 +451,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/users/password/${user.username}`,
+        `process.env.REACT_APP_API_URL/api/users/password/${user.username}`,
         { currentPassword: current, newPassword },
         { headers: { 'x-auth-token': token } }
       );

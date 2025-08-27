@@ -22,7 +22,7 @@ const Classes = () => {
     const fetchClasses = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/api/classes", {
+        const response = await axios.get("process.env.REACT_APP_API_URL/api/classes", {
           headers: { "x-auth-token": token },
         });
         setClasses(response.data);
@@ -33,7 +33,7 @@ const Classes = () => {
     const fetchTeachers = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/api/teachers", {
+        const response = await axios.get("process.env.REACT_APP_API_URL/api/teachers", {
           headers: { "x-auth-token": token },
         });
         setTeachers(response.data);
@@ -52,11 +52,11 @@ const Classes = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/classes", formData, {
+      await axios.post("process.env.REACT_APP_API_URL/api/classes", formData, {
         headers: { "x-auth-token": token },
       });
       // Refresh classes list
-      const response = await axios.get("http://localhost:5000/api/classes", {
+      const response = await axios.get("process.env.REACT_APP_API_URL/api/classes", {
         headers: { "x-auth-token": token },
       });
       setClasses(response.data);
@@ -85,14 +85,14 @@ const Classes = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/classes/${selectedClass._id}`,
+        `process.env.REACT_APP_API_URL/api/classes/${selectedClass._id}`,
         formData,
         {
           headers: { "x-auth-token": token },
         }
       );
       // Refresh classes list
-      const response = await axios.get("http://localhost:5000/api/classes", {
+      const response = await axios.get("process.env.REACT_APP_API_URL/api/classes", {
         headers: { "x-auth-token": token },
       });
       setClasses(response.data);
@@ -112,11 +112,11 @@ const Classes = () => {
     if (window.confirm("آیا از حذف این صنف مطمئن هستید؟")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/classes/${id}`, {
+        await axios.delete(`process.env.REACT_APP_API_URL/api/classes/${id}`, {
           headers: { "x-auth-token": token },
         });
         // Refresh classes list
-        const response = await axios.get("http://localhost:5000/api/classes", {
+        const response = await axios.get("process.env.REACT_APP_API_URL/api/classes", {
           headers: { "x-auth-token": token },
         });
         setClasses(response.data);

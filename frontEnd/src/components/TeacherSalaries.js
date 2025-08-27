@@ -32,7 +32,7 @@ const TeacherSalaries = () => {
       const token = localStorage.getItem('token');
       
       if (reportType === 'monthly') {
-        const response = await axios.get(`http://localhost:5000/api/teacherPayments/reports/monthly`, {
+        const response = await axios.get(`process.env.REACT_APP_API_URL/api/teacherPayments/reports/monthly`, {
           headers: { 'x-auth-token': token },
           params: {
             year: selectedYear,
@@ -41,7 +41,7 @@ const TeacherSalaries = () => {
         });
         setMonthlyReport(response.data);
       } else {
-        const response = await axios.get(`http://localhost:5000/api/teacherPayments/reports/annual`, {
+        const response = await axios.get(`process.env.REACT_APP_API_URL/api/teacherPayments/reports/annual`, {
           headers: { 'x-auth-token': token },
           params: {
             year: selectedYear
