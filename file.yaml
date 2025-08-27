@@ -1,0 +1,29 @@
+services:
+  # =============================
+  # Backend (Node.js / Express)
+  # =============================
+  - type: web
+    name: school-backend
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: mongodb+srv://mhnazary2020:12345@cluster0.zze6col.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+        sync: false   # We'll set this manually in Render Dashboard
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+
+  # =============================
+  # Frontend (React)
+  # =============================
+  - type: static
+    name: school-frontend
+    env: static
+    buildCommand: "npm install && npm run build"
+    publishPath: "build"
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://school-backend.onrender.com
