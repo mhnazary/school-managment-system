@@ -28,7 +28,7 @@ services:
     name: school-management-frontend
     env: static
     buildCommand: "cd frontEnd && npm install && npm run build"
-    publishDirectory: frontEnd/build
+    publishDirectory: ./build
     envVars:
       - key: REACT_APP_API_URL
         value: https://school-management-backend.onrender.com
