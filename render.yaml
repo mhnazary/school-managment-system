@@ -1,5 +1,5 @@
 services:
-  # Backend Service
+  # Backend Service - Node.js API
   - type: web
     name: school-management-backend
     env: node
@@ -23,9 +23,10 @@ services:
       mountPath: /opt/render/project/data
       sizeGB: 1
 
-  # Frontend Service
-  - type: static_site
+  # Frontend Service - React Static Site
+  - type: web
     name: school-management-frontend
+    env: static
     buildCommand: "cd client && npm install && npm run build"
     publishDirectory: client/build
     envVars:
