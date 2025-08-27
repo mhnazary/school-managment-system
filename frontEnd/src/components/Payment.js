@@ -44,7 +44,7 @@ const Payment = () => {
     const fetchStudent = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`process.env.REACT_APP_API_URL/api/students/${studentId}`, {
+        const response = await axios.get(`http://localhost:5000/api/students/${studentId}`, {
           headers: { 'x-auth-token': token }
         });
         setStudent(response.data);
@@ -56,7 +56,7 @@ const Payment = () => {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`process.env.REACT_APP_API_URL/api/students/${studentId}/payments`, {
+        const response = await axios.get(`http://localhost:5000/api/students/${studentId}/payments`, {
           headers: { 'x-auth-token': token }
         });
         // Filter out base payments (paymentType: 'پایه')
@@ -126,7 +126,7 @@ const Payment = () => {
         return;
       }
       
-      await axios.post('process.env.REACT_APP_API_URL/api/payments', {
+      await axios.post('http://localhost:5000/api/payments', {
         student: studentId,
         installment: installment,
         amount: paymentAmount,
@@ -138,7 +138,7 @@ const Payment = () => {
       });
       
       // Refresh payments
-      const paymentsResponse = await axios.get(`process.env.REACT_APP_API_URL/api/students/${studentId}/payments`, {
+      const paymentsResponse = await axios.get(`http://localhost:5000/api/students/${studentId}/payments`, {
         headers: { 'x-auth-token': token }
       });
       // Filter out base payments

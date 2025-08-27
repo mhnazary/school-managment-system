@@ -66,7 +66,7 @@ const StudentTuition = () => {
     const fetchClasses = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("process.env.REACT_APP_API_URL/api/classes", {
+        const response = await axios.get("http://localhost:5000/api/classes", {
           headers: { "x-auth-token": token },
         });
         setClasses(response.data);
@@ -79,7 +79,7 @@ const StudentTuition = () => {
     const fetchStudents = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("process.env.REACT_APP_API_URL/api/students", {
+        const response = await axios.get("http://localhost:5000/api/students", {
           headers: { "x-auth-token": token },
         });
         setStudents(response.data);
@@ -102,7 +102,7 @@ const StudentTuition = () => {
 
         if (reportType === "monthly") {
           const response = await axios.get(
-            "process.env.REACT_APP_API_URL/api/payments/reports/monthly",
+            "http://localhost:5000/api/payments/reports/monthly",
             {
               headers: { "x-auth-token": token },
               params: {
@@ -114,7 +114,7 @@ const StudentTuition = () => {
           setMonthlyReport(response.data);
         } else {
           const response = await axios.get(
-            "process.env.REACT_APP_API_URL/api/payments/reports/annual",
+            "http://localhost:5000/api/payments/reports/annual",
             {
               headers: { "x-auth-token": token },
               params: {
@@ -150,7 +150,7 @@ const StudentTuition = () => {
             try {
               // دریافت پرداخت‌های دانش‌آموز برای ماه و سال انتخاب شده
               const paymentsResponse = await axios.get(
-                `process.env.REACT_APP_API_URL/api/payments/student/${student._id}/payments-by-month`,
+                `http://localhost:5000/api/payments/student/${student._id}/payments-by-month`,
                 {
                   headers: { "x-auth-token": token },
                   params: {

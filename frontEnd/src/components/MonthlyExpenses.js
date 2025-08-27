@@ -64,7 +64,7 @@ const MonthlyExpenses = () => {
       if (filters.year) params.year = filters.year;
       if (filters.category) params.category = filters.category;
       
-      const response = await axios.get('process.env.REACT_APP_API_URL/api/expenses', {
+      const response = await axios.get('http://localhost:5000/api/expenses', {
         headers: { 'x-auth-token': token },
         params
       });
@@ -121,7 +121,7 @@ const MonthlyExpenses = () => {
       
       if (editingExpense) {
         // Update existing expense
-        await axios.put(`process.env.REACT_APP_API_URL/api/expenses/${editingExpense._id}`, {
+        await axios.put(`http://localhost:5000/api/expenses/${editingExpense._id}`, {
           ...formData,
           amount: parseInt(formData.amount)
         }, {
@@ -130,7 +130,7 @@ const MonthlyExpenses = () => {
         alert('هزینه با موفقیت به‌روزرسانی شد');
       } else {
         // Add new expense
-        await axios.post('process.env.REACT_APP_API_URL/api/expenses', {
+        await axios.post('http://localhost:5000/api/expenses', {
           ...formData,
           amount: parseInt(formData.amount)
         }, {
@@ -188,7 +188,7 @@ const MonthlyExpenses = () => {
     if (window.confirm('آیا از حذف این هزینه مطمئن هستید؟')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`process.env.REACT_APP_API_URL/api/expenses/${id}`, {
+        await axios.delete(`http://localhost:5000/api/expenses/${id}`, {
           headers: { 'x-auth-token': token }
         });
         

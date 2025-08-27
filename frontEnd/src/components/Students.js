@@ -34,7 +34,7 @@ const Students = ({ classId, embedded = false }) => {
     const fetchStudents = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`process.env.REACT_APP_API_URL/api/students/class/${actualClassId}`, {
+        const response = await axios.get(`http://localhost:5000/api/students/class/${actualClassId}`, {
           headers: { 'x-auth-token': token }
         });
         setStudents(response.data);
@@ -58,7 +58,7 @@ const Students = ({ classId, embedded = false }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('process.env.REACT_APP_API_URL/api/students', {
+      await axios.post('http://localhost:5000/api/students', {
         ...formData,
         class: actualClassId,
         baseFee: formData.baseFee ? parseInt(formData.baseFee) : 0
@@ -67,7 +67,7 @@ const Students = ({ classId, embedded = false }) => {
       });
       
       // Refresh students list
-      const response = await axios.get(`process.env.REACT_APP_API_URL/api/students/class/${actualClassId}`, {
+      const response = await axios.get(`http://localhost:5000/api/students/class/${actualClassId}`, {
         headers: { 'x-auth-token': token }
       });
       setStudents(response.data);
@@ -116,7 +116,7 @@ const Students = ({ classId, embedded = false }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`process.env.REACT_APP_API_URL/api/students/${selectedStudent._id}`, {
+      await axios.put(`http://localhost:5000/api/students/${selectedStudent._id}`, {
         ...formData,
         class: actualClassId,
         baseFee: formData.baseFee ? parseInt(formData.baseFee) : 0
@@ -125,7 +125,7 @@ const Students = ({ classId, embedded = false }) => {
       });
       
       // Refresh students list
-      const response = await axios.get(`process.env.REACT_APP_API_URL/api/students/class/${actualClassId}`, {
+      const response = await axios.get(`http://localhost:5000/api/students/class/${actualClassId}`, {
         headers: { 'x-auth-token': token }
       });
       setStudents(response.data);
@@ -164,12 +164,12 @@ const Students = ({ classId, embedded = false }) => {
     if (window.confirm('آیا از حذف این دانش‌آموز مطمئن هستید؟')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`process.env.REACT_APP_API_URL/api/students/${id}`, {
+        await axios.delete(`http://localhost:5000/api/students/${id}`, {
           headers: { 'x-auth-token': token }
         });
         
         // Refresh students list
-        const response = await axios.get(`process.env.REACT_APP_API_URL/api/students/class/${actualClassId}`, {
+        const response = await axios.get(`http://localhost:5000/api/students/class/${actualClassId}`, {
           headers: { 'x-auth-token': token }
         });
         setStudents(response.data);
