@@ -4,21 +4,16 @@ const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth');
 const User = require('../models/User');
 
-// @route   PUT api/users/password/:userType
-// @desc    Change password for admin or administrator
+// @route   PUT api/users/password/:username
+// @desc    Change password for any user by username
 // @access  Private
-router.put('/password/:userType', auth, async (req, res) => {
-  const { userType } = req.params;
+router.put('/password/:username', auth, async (req, res) => {
+  const { username } = req.params;
   const { currentPassword, newPassword } = req.body;
 
-  // Validate userType
-  if (userType !== 'admin' && userType !== 'administrator') {
-    return res.status(400).json({ msg: 'نوع کاربر نامعتبر است' });
-  }
-
   try {
-    // Find the user by username (which is the userType)
-    const user = await User.findOne({ username: userType });
+    // Find the user by username
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ msg: 'کاربر یافت نشد' });
     }

@@ -44,8 +44,9 @@ const Dashboard = () => {
   
   // Password change state
   const [passwordChange, setPasswordChange] = useState({
-    admin: { current: '', new: '', confirm: '' },
-    administrator: { current: '', new: '', confirm: '' }
+    current: '',
+    new: '',
+    confirm: ''
   });
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState({ type: '', text: '' });
@@ -425,8 +426,8 @@ const Dashboard = () => {
   };
   
   // Password change function
-  const handlePasswordChange = async (userType) => {
-    const { current, new: newPassword, confirm } = passwordChange[userType];
+  const handlePasswordChange = async () => {
+    const { current, new: newPassword, confirm } = passwordChange;
     
     // Validate fields
     if (!current || !newPassword || !confirm) {
@@ -450,7 +451,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/users/password/${userType}`,
+        `http://localhost:5000/api/users/password/${user.username}`,
         { currentPassword: current, newPassword },
         { headers: { 'x-auth-token': token } }
       );
@@ -458,8 +459,9 @@ const Dashboard = () => {
       setPasswordMessage({ type: 'success', text: 'رمز عبور با موفقیت تغییر یافت' });
       // Clear fields after success
       setPasswordChange({
-        ...passwordChange,
-        [userType]: { current: '', new: '', confirm: '' }
+        current: '',
+        new: '',
+        confirm: ''
       });
     } catch (err) {
       console.error('Error changing password:', err);
@@ -518,10 +520,10 @@ const Dashboard = () => {
   
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100" dir="rtl">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4">در حال بارگذاری...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-6 text-xl font-medium text-gray-700">در حال بارگذاری...</p>
         </div>
       </div>
     );
@@ -535,31 +537,31 @@ const Dashboard = () => {
   };
   
   return (
-    <div className="min-h-screen flex" dir="rtl">
+    <div className="min-h-screen flex bg-gradient-to-br from-gray-50 to-gray-100" dir="rtl">
       {/* Fixed Sidebar */}
-      <div className="fixed inset-y-0 right-0 w-64 bg-white shadow-md z-10 flex flex-col">
-        <div className="p-4 border-b">
+      <div className="fixed inset-y-0 right-0 w-64 bg-white shadow-xl z-10 flex flex-col">
+        <div className="p-6 border-b bg-gradient-to-r from-blue-600 to-indigo-700">
           <div className="flex items-center">
-            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold ml-3">
+            <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-xl ml-4 shadow-lg">
               رد
             </div>
-            <h1 className="text-xl font-bold text-gray-800">مکتب رهنورد دانش</h1>
+            <h1 className="text-xl font-bold text-white">مکتب رهنورد دانش</h1>
           </div>
         </div>
         
-        <nav className="flex-1 px-2 py-4 overflow-y-auto">
-          <ul>
+        <nav className="flex-1 px-4 py-6 overflow-y-auto">
+          <ul className="space-y-2">
             {sidebarItems.map((item) => (
-              <li key={item.id} className="mb-1">
+              <li key={item.id}>
                 <Link
                   to={`/dashboard/${item.id}`}
-                  className={`w-full flex items-center p-3 text-base font-normal rounded-lg transition duration-300 ${
+                  className={`w-full flex items-center p-4 text-base font-medium rounded-xl transition-all duration-300 ${
                     activeTab === item.id
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 border-r-4 border-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 hover:shadow-sm'
                   }`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                   </svg>
                   <span>{item.name}</span>
@@ -572,9 +574,9 @@ const Dashboard = () => {
         <div className="p-4 border-t">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center p-3 text-base font-normal text-gray-700 rounded-lg hover:bg-red-50 hover:text-red-700 transition duration-300"
+            className="w-full flex items-center p-4 text-base font-medium text-gray-600 rounded-xl hover:bg-red-50 hover:text-red-700 transition duration-300 hover:shadow-sm"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             <span>خروج از سیستم</span>
@@ -584,141 +586,115 @@ const Dashboard = () => {
       
       {/* Main Content with left margin for sidebar */}
       <div className="flex-1 mr-64 overflow-auto">
-        <main className="p-6">
+        <main className="p-8">
           {activeTab === 'dashboard' && (
             <div>
-              <h2 className="text-xl font-semibold mb-6">خلاصه وضعیت مکتب</h2>
+              {/* Header */}
+              
               
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-2xl shadow-lg transform transition-transform duration-300 hover:scale-105">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-blue-100">دانش‌آموزان</p>
+                      {statsLoading ? (
+                        <div className="animate-pulse h-10 w-20 bg-blue-400 rounded mt-3"></div>
+                      ) : (
+                        <p className="text-4xl font-bold text-white mt-2">{dashboardStats.students}</p>
+                      )}
+                    </div>
+                    <div className="p-4 rounded-full bg-blue-400 bg-opacity-30">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                       </svg>
                     </div>
-                    <div className="mr-4">
-                      <p className="text-sm font-medium text-gray-600">دانش‌آموزان</p>
-                      {statsLoading ? (
-                        <div className="animate-pulse h-8 w-16 bg-gray-200 rounded mt-2"></div>
-                      ) : (
-                        <p className="text-2xl font-semibold">{dashboardStats.students}</p>
-                      )}
-                    </div>
                   </div>
                 </div>
                 
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-green-100 text-green-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg transform transition-transform duration-300 hover:scale-105">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-green-100">معلمان</p>
+                      {statsLoading ? (
+                        <div className="animate-pulse h-10 w-20 bg-green-400 rounded mt-3"></div>
+                      ) : (
+                        <p className="text-4xl font-bold text-white mt-2">{dashboardStats.teachers}</p>
+                      )}
+                    </div>
+                    <div className="p-4 rounded-full bg-green-400 bg-opacity-30">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                       </svg>
                     </div>
-                    <div className="mr-4">
-                      <p className="text-sm font-medium text-gray-600">معلمان</p>
-                      {statsLoading ? (
-                        <div className="animate-pulse h-8 w-16 bg-gray-200 rounded mt-2"></div>
-                      ) : (
-                        <p className="text-2xl font-semibold">{dashboardStats.teachers}</p>
-                      )}
-                    </div>
                   </div>
                 </div>
                 
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-purple-100 text-purple-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl shadow-lg transform transition-transform duration-300 hover:scale-105">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-purple-100">صنف‌ها</p>
+                      {statsLoading ? (
+                        <div className="animate-pulse h-10 w-20 bg-purple-400 rounded mt-3"></div>
+                      ) : (
+                        <p className="text-4xl font-bold text-white mt-2">{dashboardStats.classes}</p>
+                      )}
+                    </div>
+                    <div className="p-4 rounded-full bg-purple-400 bg-opacity-30">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
                     </div>
-                    <div className="mr-4">
-                      <p className="text-sm font-medium text-gray-600">صنف‌ ها</p>
-                      {statsLoading ? (
-                        <div className="animate-pulse h-8 w-16 bg-gray-200 rounded mt-2"></div>
-                      ) : (
-                        <p className="text-2xl font-semibold">{dashboardStats.classes}</p>
-                      )}
-                    </div>
                   </div>
                 </div>
                 
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <div className="flex items-center">
-                    <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="mr-4">
-                      <p className="text-sm font-medium text-gray-600">
-                        {reportType === 'monthly' ? 'درآمد ماهانه (افغانی)' : 'درآمد سالانه (افغانی)'}
+                <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-6 rounded-2xl shadow-lg transform transition-transform duration-300 hover:scale-105">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-amber-100">
+                        {reportType === 'monthly' ? 'درآمد ماهانه' : 'درآمد سالانه'}
                       </p>
                       {statsLoading || financialLoading ? (
-                        <div className="animate-pulse h-8 w-24 bg-gray-200 rounded mt-2"></div>
+                        <div className="animate-pulse h-10 w-24 bg-amber-400 rounded mt-3"></div>
                       ) : (
-                        <div className="flex items-baseline">
-                          <p className="text-2xl font-semibold">
-                            {reportType === 'monthly' && financialData && financialData.summary.totalIncome > 0
-                              ? financialData.summary.totalIncome.toLocaleString('fa-IR')
-                              : dashboardStats.revenue.toLocaleString('fa-IR')
-                            }
-                          </p>
-                          {reportType === 'monthly' && financialData && financialData.summary.totalIncome > 0 && (
-                            <span className="text-sm text-gray-500 mr-2">
-                              ({getMonthName(selectedMonth)} {selectedYear})
-                            </span>
-                          )}
-                        </div>
+                        <p className="text-4xl font-bold text-white mt-2">
+                          {reportType === 'monthly' && financialData && financialData.summary.totalIncome > 0
+                            ? financialData.summary.totalIncome.toLocaleString('fa-IR')
+                            : dashboardStats.revenue.toLocaleString('fa-IR')
+                          }
+                        </p>
                       )}
-                      {reportType === 'monthly' && financialData && financialData.summary.totalIncome > 0 && (
-                        <div className="mt-1">
-                          <div className="flex items-center">
-                            <div className="w-2 h-2 rounded-full bg-green-500 mr-1"></div>
-                            <span className="text-xs text-green-600 font-medium">
-                              {((financialData.summary.totalIncome / Math.max(financialData.summary.totalIncome + financialData.summary.totalExpenses, 1)) * 100).toFixed(1)}% از کل درآمد
-                            </span>
-                          </div>
-                        </div>
-                      )}
+                    </div>
+                    <div className="p-4 rounded-full bg-amber-400 bg-opacity-30">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                     </div>
                   </div>
                 </div>
               </div>
               
-              {/* School Status and Financial Report Section */}
-              <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold">گزارش مالی</h2>
+              {/* Financial Report Section */}
+              <div className="bg-white rounded-2xl shadow-xl p-8 mb-10">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">گزارش مالی</h2>
                   
                   {/* Financial Report Filters */}
-                  <div className="flex space-x-reverse space-x-4">
+                  <div className="flex flex-wrap gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">نوع گزارش</label>
                       <div className="flex space-x-reverse space-x-2">
                         <button
                           onClick={() => setReportType('monthly')}
-                          className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                          className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
                             reportType === 'monthly'
-                              ? 'bg-blue-600 text-white'
+                              ? 'bg-blue-600 text-white shadow-md'
                               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                           }`}
                         >
                           ماهانه
                         </button>
-                        <button
-                          onClick={() => setReportType('annual')}
-                          className={`px-3 py-1 rounded-md text-sm transition-colors ${
-                            reportType === 'annual'
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                          }`}
-                        >
-                          سالانه
-                        </button>
-                      </div>
+                                             </div>
                     </div>
                     
                     <div>
@@ -726,7 +702,7 @@ const Dashboard = () => {
                       <select
                         value={selectedYear}
                         onChange={(e) => setSelectedYear(e.target.value)}
-                        className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+                        className="px-5 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       >
                         {generateYears().map(year => (
                           <option key={year} value={year}>{year}</option>
@@ -740,7 +716,7 @@ const Dashboard = () => {
                         <select
                           value={selectedMonth}
                           onChange={(e) => setSelectedMonth(e.target.value)}
-                          className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+                          className="px-5 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         >
                           {persianMonths.map((month, index) => (
                             <option key={index} value={(index + 1).toString()}>{month}</option>
@@ -752,17 +728,17 @@ const Dashboard = () => {
                 </div>
                 
                 {apiError && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-8">
-                    <div className="text-red-600 mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center mb-8">
+                    <div className="text-red-600 mb-6">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-20 w-20 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-medium text-red-800 mb-2">خطا در دریافت اطلاعات</h3>
-                    <p className="text-red-600 mb-4">{apiError}</p>
+                    <h3 className="text-xl font-medium text-red-800 mb-3">خطا در دریافت اطلاعات</h3>
+                    <p className="text-red-600 mb-6">{apiError}</p>
                     <button
                       onClick={fetchFinancialData}
-                      className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                      className="px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors shadow-md"
                     >
                       تلاش مجدد
                     </button>
@@ -770,110 +746,110 @@ const Dashboard = () => {
                 )}
                 
                 {financialLoading ? (
-                  <div className="text-center py-10">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">در حال بارگذاری گزارش مالی...</p>
-                    <p className="text-sm text-gray-500">لطفاً چند لحظه صبر کنید</p>
+                  <div className="text-center py-16">
+                    <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-blue-600 mx-auto"></div>
+                    <p className="mt-8 text-gray-600 text-xl">در حال بارگذاری گزارش مالی...</p>
+                    <p className="text-gray-500 mt-3">لطفاً چند لحظه صبر کنید</p>
                   </div>
                 ) : financialData && (financialData.summary.totalIncome > 0 || financialData.summary.totalExpenses > 0) ? (
                   <>
                     {/* Summary Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                      <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg shadow-md border border-green-200">
-                        <div className="flex items-center">
-                          <div className="p-3 rounded-full bg-green-500 text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-sm font-medium text-gray-700">مجموع درآمد</p>
-                            <p className="text-2xl font-bold text-green-700">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                      <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-2xl shadow-md border border-green-200">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-green-700">مجموع درآمد</p>
+                            <p className="text-4xl font-bold text-green-800 mt-3">
                               {financialData.summary.totalIncome.toLocaleString('fa-IR')} افغانی
                             </p>
                             {financialData.summary.totalIncome === 0 && (
-                              <p className="text-xs text-yellow-600 mt-1">هیچ درآمدی ثبت نشده است</p>
+                              <p className="text-xs text-yellow-600 mt-3">هیچ درآمدی ثبت نشده است</p>
                             )}
+                          </div>
+                          <div className="p-4 rounded-full bg-green-500 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                           </div>
                         </div>
                       </div>
                       
-                      <div className="bg-gradient-to-r from-red-50 to-red-100 p-6 rounded-lg shadow-md border border-red-200">
-                        <div className="flex items-center">
-                          <div className="p-3 rounded-full bg-red-500 text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538.214 1.055.595 1.436L4 17h5m6 0v1m3-3h-1m-1 0h-1m4 0h-1m-1 0h-1m-5 0v1" />
-                            </svg>
-                          </div>
-                          <div className="mr-4">
-                            <p className="text-sm font-medium text-gray-700">مجموع مصارف</p>
-                            <p className="text-2xl font-bold text-red-700">
+                      <div className="bg-gradient-to-r from-red-50 to-red-100 p-6 rounded-2xl shadow-md border border-red-200">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-red-700">مجموع مصارف</p>
+                            <p className="text-4xl font-bold text-red-800 mt-3">
                               {financialData.summary.totalExpenses.toLocaleString('fa-IR')} افغانی
                             </p>
                             {financialData.summary.totalExpenses === 0 && (
-                              <p className="text-xs text-yellow-600 mt-1">هیچ هزینه‌ای ثبت نشده است</p>
+                              <p className="text-xs text-yellow-600 mt-3">هیچ هزینه‌ای ثبت نشده است</p>
                             )}
+                          </div>
+                          <div className="p-4 rounded-full bg-red-500 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538.214 1.055.595 1.436L4 17h5m6 0v1m3-3h-1m-1 0h-1m4 0h-1m-1 0h-1m-5 0v1" />
+                            </svg>
                           </div>
                         </div>
                       </div>
                       
-                      <div className={`bg-gradient-to-r p-6 rounded-lg shadow-md border ${
+                      <div className={`bg-gradient-to-r p-6 rounded-2xl shadow-md border ${
                         financialData.summary.balance >= 0 
                           ? 'from-blue-50 to-blue-100 border-blue-200' 
                           : 'from-yellow-50 to-yellow-100 border-yellow-200'
                       }`}>
-                        <div className="flex items-center">
-                          <div className={`p-3 rounded-full text-white ${
-                            financialData.summary.balance >= 0 ? 'bg-blue-500' : 'bg-yellow-500'
-                          }`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                          </div>
-                          <div className="mr-4">
+                        <div className="flex items-center justify-between">
+                          <div>
                             <p className="text-sm font-medium text-gray-700">توازن مالی</p>
-                            <p className={`text-2xl font-bold ${
-                              financialData.summary.balance >= 0 ? 'text-blue-700' : 'text-yellow-700'
+                            <p className={`text-4xl font-bold mt-3 ${
+                              financialData.summary.balance >= 0 ? 'text-blue-800' : 'text-yellow-800'
                             }`}>
                               {financialData.summary.balance.toLocaleString('fa-IR')} افغانی
                             </p>
-                            <p className={`text-xs mt-1 ${
+                            <p className={`text-xs mt-3 ${
                               financialData.summary.balance >= 0 ? 'text-blue-600' : 'text-yellow-600'
                             }`}>
                               {financialData.summary.balance >= 0 ? 'سود' : 'زیان'}
                             </p>
                             {financialData.summary.totalIncome === 0 && financialData.summary.totalExpenses === 0 && (
-                              <p className="text-xs text-gray-500 mt-1">هیچ تراکنشی ثبت نشده است</p>
+                              <p className="text-xs text-gray-500 mt-3">هیچ تراکنشی ثبت نشده است</p>
                             )}
+                          </div>
+                          <div className={`p-4 rounded-full text-white ${
+                            financialData.summary.balance >= 0 ? 'bg-blue-500' : 'bg-yellow-500'
+                          }`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
                           </div>
                         </div>
                       </div>
                     </div>
                     
                     {/* Detailed Table */}
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200 mt-6">
+                    <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+                      <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">بخش</th>
-                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">مبلغ (افغانی)</th>
+                            <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">بخش</th>
+                            <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">مبلغ (افغانی)</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap font-medium">درآمد کل (شهریه دانش‌آموزان)</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">درآمد کل (شهریه دانش‌آموزان)</td>
                             <td className="px-6 py-4 whitespace-nowrap text-green-600 font-semibold">
                               {financialData.summary.totalIncome.toLocaleString('fa-IR')} افغانی
                             </td>
                           </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap font-medium">مصارف کل (معاش معلمین + هزینه‌های جاری)</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">مصارف کل (معاش معلمین + هزینه‌های جاری)</td>
                             <td className="px-6 py-4 whitespace-nowrap text-red-600 font-semibold">
                               {financialData.summary.totalExpenses.toLocaleString('fa-IR')} افغانی
                             </td>
                           </tr>
-                          <tr>
-                            <td className="px-6 py-4 whitespace-nowrap font-medium">توازن (درآمد - مصارف)</td>
+                          <tr className="hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">توازن (درآمد - مصارف)</td>
                             <td className={`px-6 py-4 whitespace-nowrap font-semibold ${
                               financialData.summary.balance >= 0 ? 'text-green-600' : 'text-red-600'
                             }`}>
@@ -886,10 +862,10 @@ const Dashboard = () => {
                     
                     {/* Update Button for Administrator */}
                     {user && user.role === 'administrator' && (
-                      <div className="mt-6 text-center">
+                      <div className="mt-8 text-center">
                         <button
                           onClick={fetchFinancialData}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                          className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-medium rounded-2xl hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                         >
                           به‌روزرسانی گزارش مالی
                         </button>
@@ -897,28 +873,28 @@ const Dashboard = () => {
                     )}
                   </>
                 ) : (
-                  <div className="text-center py-10">
-                    <div className="text-gray-400 mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="text-center py-16">
+                    <div className="text-gray-400 mb-8">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-28 w-28 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-medium text-gray-600 mb-2">هیچ داده مالی وجود ندارد</h3>
-                    <p className="text-gray-500 mb-4">
+                    <h3 className="text-2xl font-medium text-gray-600 mb-6">هیچ داده مالی وجود ندارد</h3>
+                    <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg">
                       {reportType === 'monthly' 
                         ? `هیچ تراکنش مالی برای ماه ${getMonthName(selectedMonth)} ${selectedYear} ثبت نشده است.`
                         : `هیچ تراکنش مالی برای سال ${selectedYear} ثبت نشده است.`}
                     </p>
-                    <div className="flex justify-center space-x-reverse space-x-4">
+                    <div className="flex justify-center space-x-reverse space-x-6">
                       <button
                         onClick={() => navigate('/dashboard/studentTuition')}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                        className="px-8 py-4 bg-blue-600 text-white font-medium rounded-2xl hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
                       >
                         ثبت شهریه
                       </button>
                       <button
                         onClick={() => navigate('/dashboard/monthlyExpenses')}
-                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                        className="px-8 py-4 bg-red-600 text-white font-medium rounded-2xl hover:bg-red-700 transition-colors shadow-lg hover:shadow-xl"
                       >
                         ثبت هزینه
                       </button>
@@ -927,136 +903,7 @@ const Dashboard = () => {
                 )}
               </div>
               
-              {/* Student Tuition Section */}
-              <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold">شهریه دانش‌آموزان</h2>
-                  <button
-                    onClick={() => navigate('/dashboard/studentTuition')}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    مشاهده جزئیات
-                  </button>
-                </div>
-                
-                {apiStatus.tuition.loading ? (
-                  <div className="text-center py-10">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4">در حال بارگذاری داده‌های شهریه...</p>
-                  </div>
-                ) : apiStatus.tuition.error ? (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                    <h3 className="text-lg font-medium text-red-800 mb-2">خطا در دریافت اطلاعات شهریه</h3>
-                    <p className="text-red-600 mb-4">{apiStatus.tuition.error}</p>
-                    <button
-                      onClick={fetchFinancialData}
-                      className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                    >
-                      تلاش مجدد
-                    </button>
-                  </div>
-                ) : tuitionData ? (
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">مجموع شهریه دریافتی</p>
-                      <p className="text-2xl font-bold text-blue-700">
-                        {(tuitionData.totalPaid || 0).toLocaleString('fa-IR')} افغانی
-                      </p>
-                    </div>
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">تعداد پرداخت‌ها</p>
-                      <p className="text-2xl font-bold text-green-700">
-                        {tuitionData.paymentCount || 0}
-                      </p>
-                    </div>
-                    <div className="bg-yellow-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">دانش‌آموزان پرداخت‌کننده</p>
-                      <p className="text-2xl font-bold text-yellow-700">
-                        {tuitionData.paidStudentCount || 0} نفر
-                      </p>
-                    </div>
-                    <div className="bg-red-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">دانش‌آموزان باقی‌مانده</p>
-                      <p className="text-2xl font-bold text-red-700">
-                        {tuitionData.remainingStudentCount || 0} نفر
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-10">
-                    <p className="text-gray-600">هیچ داده‌ای برای شهریه دانش‌آموزان وجود ندارد</p>
-                    <button
-                      onClick={() => navigate('/dashboard/studentTuition')}
-                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                    >
-                      ثبت شهریه جدید
-                    </button>
-                  </div>
-                )}
-              </div>
-              
-              {/* Teacher Salaries Section */}
-              <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-semibold">حقوق معلمین</h2>
-                  <button
-                    onClick={() => navigate('/dashboard/teacherSalaries')}
-                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-                  >
-                    مشاهده جزئیات
-                  </button>
-                </div>
-                
-                {apiStatus.salaries.loading ? (
-                  <div className="text-center py-10">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
-                    <p className="mt-4">در حال بارگذاری داده‌های حقوق...</p>
-                  </div>
-                ) : apiStatus.salaries.error ? (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                    <h3 className="text-lg font-medium text-red-800 mb-2">خطا در دریافت اطلاعات حقوق</h3>
-                    <p className="text-red-600 mb-4">{apiStatus.salaries.error}</p>
-                    <button
-                      onClick={fetchFinancialData}
-                      className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                    >
-                      تلاش مجدد
-                    </button>
-                  </div>
-                ) : salariesData ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">مجموع حقوق پرداخت‌شده</p>
-                      <p className="text-2xl font-bold text-green-700">
-                        {(salariesData.totalPaidAmount || 0).toLocaleString('fa-IR')} افغانی
-                      </p>
-                    </div>
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">مجموع حقوق ماهانه</p>
-                      <p className="text-2xl font-bold text-blue-700">
-                        {(salariesData.totalMonthlySalary || 0).toLocaleString('fa-IR')} افغانی
-                      </p>
-                    </div>
-                    <div className="bg-purple-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600">تعداد معلمان پرداخت‌شده</p>
-                      <p className="text-2xl font-bold text-purple-700">
-                        {salariesData.teachers ? salariesData.teachers.filter(t => t.status === 'پرداخت‌شده').length : 0} نفر
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-10">
-                    <p className="text-gray-600">هیچ داده‌ای برای حقوق معلمین وجود ندارد</p>
-                    <button
-                      onClick={() => navigate('/dashboard/teacherSalaries')}
-                      className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-                    >
-                      ثبت حقوق جدید
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+             </div>
           )}
           
           {activeTab === 'classes' && <Classes />}
@@ -1066,166 +913,181 @@ const Dashboard = () => {
           {activeTab === 'monthlyExpenses' && <MonthlyExpenses />}
           
           {activeTab === 'settings' && (
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-4">تنظیمات سیستم</h2>
-              <p className="text-gray-600 mb-6">در این بخش می‌توانید تنظیمات سیستم را مدیریت کنید.</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-4">اطلاعات مکتب</h3>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">نام مکتب</label>
-                    <input 
-                      type="text" 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                      defaultValue="مکتب رهنورد دانش" 
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">سال تحصیلی</label>
-                    <input 
-                      type="text" 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                      defaultValue="1402-1403" 
-                    />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">آدرس</label>
-                    <textarea 
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                      rows="3"
-                      defaultValue="تهران، خیابان آزادی، کوچه دانش"
-                    ></textarea>
-                  </div>
-                  
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
-                    ذخیره اطلاعات
-                  </button>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-4">تغییر رمز عبور کاربران</h3>
-                  
-                  {passwordMessage.text && (
-                    <div className={`mb-4 p-3 rounded-md ${
-                      passwordMessage.type === 'error' 
-                        ? 'bg-red-50 text-red-700 border border-red-200' 
-                        : 'bg-green-50 text-green-700 border border-green-200'
-                    }`}>
-                      {passwordMessage.text}
-                    </div>
-                  )}
-                  
-                  {/* فرم تغییر رمز عبور ادمین */}
-                  <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                    <h4 className="text-md font-medium text-gray-700 mb-3">تغییر رمز عبور ادمین</h4>
-                    
-                    <div className="mb-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">رمز عبور فعلی</label>
-                      <input 
-                        type="password" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                        value={passwordChange.admin.current}
-                        onChange={(e) => setPasswordChange({
-                          ...passwordChange,
-                          admin: { ...passwordChange.admin, current: e.target.value }
-                        })}
-                      />
-                    </div>
-                    
-                    <div className="mb-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">رمز عبور جدید</label>
-                      <input 
-                        type="password" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                        value={passwordChange.admin.new}
-                        onChange={(e) => setPasswordChange({
-                          ...passwordChange,
-                          admin: { ...passwordChange.admin, new: e.target.value }
-                        })}
-                      />
-                    </div>
-                    
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">تکرار رمز عبور جدید</label>
-                      <input 
-                        type="password" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                        value={passwordChange.admin.confirm}
-                        onChange={(e) => setPasswordChange({
-                          ...passwordChange,
-                          admin: { ...passwordChange.admin, confirm: e.target.value }
-                        })}
-                      />
-                    </div>
-                    
-                    <button
-                      onClick={() => handlePasswordChange('admin')}
-                      disabled={passwordLoading}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md disabled:opacity-50"
-                    >
-                      {passwordLoading ? 'در حال تغییر...' : 'تغییر رمز عبور ادمین'}
-                    </button>
-                  </div>
-                  
-                  {/* فرم تغییر رمز عبور ادمینیستریتور */}
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <h4 className="text-md font-medium text-gray-700 mb-3">تغییر رمز عبور ادمینیستریتور</h4>
-                    
-                    <div className="mb-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">رمز عبور فعلی</label>
-                      <input 
-                        type="password" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                        value={passwordChange.administrator.current}
-                        onChange={(e) => setPasswordChange({
-                          ...passwordChange,
-                          administrator: { ...passwordChange.administrator, current: e.target.value }
-                        })}
-                      />
-                    </div>
-                    
-                    <div className="mb-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">رمز عبور جدید</label>
-                      <input 
-                        type="password" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                        value={passwordChange.administrator.new}
-                        onChange={(e) => setPasswordChange({
-                          ...passwordChange,
-                          administrator: { ...passwordChange.administrator, new: e.target.value }
-                        })}
-                      />
-                    </div>
-                    
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">تکرار رمز عبور جدید</label>
-                      <input 
-                        type="password" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                        value={passwordChange.administrator.confirm}
-                        onChange={(e) => setPasswordChange({
-                          ...passwordChange,
-                          administrator: { ...passwordChange.administrator, confirm: e.target.value }
-                        })}
-                      />
-                    </div>
-                    
-                    <button
-                      onClick={() => handlePasswordChange('administrator')}
-                      disabled={passwordLoading}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md disabled:opacity-50"
-                    >
-                      {passwordLoading ? 'در حال تغییر...' : 'تغییر رمز عبور ادمینیستریتور'}
-                    </button>
-                  </div>
-                </div>
-              </div>
+  <div className="flex justify-center items-center min-h-[calc(100vh-200px)]">
+    <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-lg transform transition-all duration-300 hover:shadow-2xl">
+      <div className="text-center mb-8">
+        <div className="mx-auto bg-gradient-to-r from-blue-500 to-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800">تغییر رمز عبور</h2>
+        <p className="text-gray-600 mt-2">برای حفظ امنیت حساب خود، رمز عبور را به طور منظم تغییر دهید</p>
+      </div>
+      
+      {passwordMessage.text && (
+        <div className={`mb-6 p-4 rounded-lg flex items-start ${
+          passwordMessage.type === 'error' 
+            ? 'bg-red-50 text-red-700 border border-red-200' 
+            : 'bg-green-50 text-green-700 border border-green-200'
+        }`}>
+          <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ml-2 mt-0.5 flex-shrink-0 ${
+            passwordMessage.type === 'error' ? 'text-red-500' : 'text-green-500'
+          }`} viewBox="0 0 20 20" fill="currentColor">
+            {passwordMessage.type === 'error' ? (
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            ) : (
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            )}
+          </svg>
+          <span>{passwordMessage.text}</span>
+        </div>
+      )}
+      
+      <div className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            رمز عبور فعلی
+          </label>
+          <div className="relative">
+            <input 
+              type="password" 
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              value={passwordChange.current}
+              onChange={(e) => setPasswordChange({
+                ...passwordChange,
+                current: e.target.value
+              })}
+              placeholder="رمز عبور فعلی خود را وارد کنید"
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
             </div>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            رمز عبور جدید
+          </label>
+          <div className="relative">
+            <input 
+              type="password" 
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              value={passwordChange.new}
+              onChange={(e) => setPasswordChange({
+                ...passwordChange,
+                new: e.target.value
+              })}
+              placeholder="رمز عبور جدید خود را وارد کنید"
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            تکرار رمز عبور جدید
+          </label>
+          <div className="relative">
+            <input 
+              type="password" 
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              value={passwordChange.confirm}
+              onChange={(e) => setPasswordChange({
+                ...passwordChange,
+                confirm: e.target.value
+              })}
+              placeholder="رمز عبور جدید را تکرار کنید"
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button
+        onClick={handlePasswordChange}
+        disabled={passwordLoading}
+        className="w-full mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-medium py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-70 disabled:cursor-not-allowed"
+      >
+        {passwordLoading ? (
+          <span className="flex items-center justify-center">
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+              در حال تغییر...
+            </span>
+          ) : (
+            <span className="flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              تغییر رمز عبور
+            </span>
           )}
+        </button>
+        
+        <div className="mt-8 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="mr-3">
+              <h3 className="text-md font-medium text-blue-800">نکات امنیتی</h3>
+              <ul className="mt-2 text-sm text-blue-700 space-y-1">
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 mt-0.5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>رمز عبور باید حداقل ۶ کاراکتر باشد</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 mt-0.5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>از ترکیبی از حروف بزرگ، کوچک، اعداد و نمادها استفاده کنید</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 mt-0.5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>رمز عبور خود را با دیگران به اشتراک نگذارید</span>
+                </li>
+                <li className="flex items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1 mt-0.5 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>به طور منظم رمز عبور خود را تغییر دهید</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+)}
         </main>
       </div>
     </div>
